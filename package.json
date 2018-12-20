@@ -1,0 +1,14 @@
+{
+ "name": "blog_contract",
+ "scripts": {
+  "dev": "lite-server",
+  "test": "truffle test"
+ },
+ "dependencies": {
+  "drizzle": "^1.2.4",
+  "truffle-contract": "^4.0.0",
+  "lite-server": "^2.3.0",
+  "chai": "^4.2.0",
+  "truffle-assertions": "^0.7.1"
+ }
+}
