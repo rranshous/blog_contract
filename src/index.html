@@ -3,6 +3,18 @@
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/js/web3.min.js"></script>
     <script src="/js/app.js"></script>
+    <script>
+      // take the string from the input and send to the contract
+      // disable/enable the button and reset the text field
+      var publishContentFromInput = async function() {
+        var input = $('.add-content input');
+        var button = $('.add-content button');
+        button.prop("disabled", true);
+        await publishContentToContract(input.val())
+        input.val('');
+        button.prop("disabled", false);
+      };
+    </script>
   </head>
   <body>
     <div id="actions">
@@ -10,7 +22,7 @@
       <div class='add-content'>
         <span>Add Content</span>
         <input type="text" name="content"/>
-        <button onclick="var e=$('.add-content input'); publishContent(e.val()).then(()=>{e.val('')});">Submit</button>
+        <button onclick="publishContentFromInput();">Submit</button>
       </div>
     </div>
     <div id="new-content">

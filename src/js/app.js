@@ -45,7 +45,7 @@ var publishContent;
   )
   console.log("BlogContract: ", BlogContract);
 
-  publishContent = function(content) {
+  publishContentToContract = function(content) {
     console.log("publishing content:", content);
     return BlogContract.methods.publishContent(content).send();
   };
