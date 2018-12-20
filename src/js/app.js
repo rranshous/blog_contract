@@ -1,4 +1,5 @@
 var BlogContract;
+var publishContent;
 (async function() {
   console.log("init app");
 
@@ -44,8 +45,18 @@ var BlogContract;
   )
   console.log("BlogContract: ", BlogContract);
 
+  publishContent = function(content) {
+    console.log("publishing content:", content);
+    return BlogContract.methods.publishContent(content).send();
+  };
+
+  var renderEvent = function(event) {
+    console.log("event: ", event);
+    $('#new-content ul').prepend(`<li>${event.returnValues.ipfsHash}</li>`);
+  };
+
   console.log("subscribing to event");
   BlogContract.events.Publish('allEvents')
-  .on('data', (event) => { console.log("event: ", event); })
+  .on('data', renderEvent)
   .on('error', (error) => { console.log("event error: ", error) });
 })();
