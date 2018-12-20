@@ -1,3 +1,4 @@
+var BlogContract;
 (async function() {
   console.log("init app");
 
@@ -32,7 +33,7 @@
   console.log("address: ", address);
   var accounts = await web3.eth.getAccounts();
   console.log("accounts: ", accounts);
-  var BlogContract = new web3.eth.Contract(
+  BlogContract = new web3.eth.Contract(
     blogAbi,
     address,
     {
