@@ -50,13 +50,40 @@ var publishContent;
     return BlogContract.methods.publishContent(content).send();
   };
 
+  var addContent = function(html) {
+    console.log('adding content', html);
+    $('#new-content ul').prepend(`<li>${html}</li>`);
+  };
+
   var renderEvent = function(event) {
-    console.log("event: ", event);
-    $('#new-content ul').prepend(`<li>${event.returnValues.ipfsHash}</li>`);
+    console.log("event:", event);
+    addContent(event.returnValues.ipfsHash);
+  };
+
+  var renderIpfsEvent = async function(event) {
+    // ipfs://ipfs/<> => /ipfs/<>
+    var ipfsPath = event.returnValues.ipfsHash.substring(6);
+    console.log("renderIpfsEvent:", event, ipfsPath);
+    ipfs.cat(ipfsPath, function (err, file) {
+      if (err) { throw err; }
+      console.log("ipfs.cat:", event.ipfsPath, file.toString('utf8'));
+      addContent(file.toString('utf8'));
+    })
+  };
+
+  var handleEvent = function(event) {
+    console.log("rendering event:", event);
+    if (event.returnValues.ipfsHash.startsWith("ipfs://")) {
+      console.log("rendering as IPFS event");
+      renderIpfsEvent(event);
+    } else {
+      console.log("rendering as content event");
+      renderEvent(event);
+    }
   };
 
   console.log("subscribing to event");
   BlogContract.events.Publish('allEvents')
-  .on('data', renderEvent)
+  .on('data', handleEvent)
   .on('error', (error) => { console.log("event error: ", error) });
 })();
