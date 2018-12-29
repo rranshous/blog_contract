@@ -10,7 +10,6 @@ contract("Blog", (accounts) => {
 
   beforeEach('setup contract and call', async () => {
     blog = await Blog.deployed();
-    console.log("USING BLOG@: ", blog.address);
     result = await blog.publishContent(ipfsHash, {from: account});
   });
 

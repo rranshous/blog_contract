@@ -1,7 +1,9 @@
 var BlogContract;
 var publishContent;
+var simplemde;
 (async function() {
   console.log("init app");
+  var converter = new showdown.Converter();
 
   console.log("initWeb3");
   // Modern dapp browsers...
@@ -30,7 +32,7 @@ var publishContent;
   var web3 = new Web3(web3Provider);
   var blogAbi = (await $.getJSON('/Blog.json')).abi
   console.log("blogAbi: ", blogAbi);
-  var address = "0xDD76dD1319a0E04c72e508203E557A7d34a5D6C2";
+  var address = "0x5f7BDE3e61E45B70A2be776F6069B2f347D1A94F";
   console.log("address: ", address);
   var accounts = await web3.eth.getAccounts();
   console.log("accounts: ", accounts);
@@ -52,6 +54,8 @@ var publishContent;
 
   var addContent = function(html) {
     console.log('adding content', html);
+    html = converter.makeHtml(html);
+    console.log('after markdown conversion, html:', html);
     $('#new-content ul').prepend(`<li>${html}</li>`);
   };
 
@@ -82,8 +86,20 @@ var publishContent;
     }
   };
 
+  var handleEvents = function(events) {
+    console.log("handleEvents:", events);
+    events.forEach(handleEvent);
+  };
+
   console.log("subscribing to event");
   BlogContract.events.Publish('allEvents')
   .on('data', handleEvent)
   .on('error', (error) => { console.log("event error: ", error) });
+
+  console.log("looking up historical events");
+  BlogContract.getPastEvents('allEvents', { fromBlock: 0 })
+  .then(handleEvents);
+
+  console.log("initializing editor");
+  simplemde = new SimpleMDE();
 })();

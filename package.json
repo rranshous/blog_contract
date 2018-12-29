@@ -5,9 +5,10 @@
   "test": "truffle test"
  },
  "dependencies": {
+  "chai": "^4.2.0",
   "drizzle": "^1.2.4",
   "lite-server": "^2.3.0",
-  "chai": "^4.2.0",
+  "showdown": "^1.9.0",
   "truffle-assertions": "^0.7.1"
  }
 }
