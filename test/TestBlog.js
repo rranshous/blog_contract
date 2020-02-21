@@ -4,20 +4,18 @@ const Blog = artifacts.require("Blog");
 
 contract("Blog", (accounts) => {
   let blog;
-  let result;
   const ipfsHash = "QmVtYjNij3KeyGmcgg7yVXWskLaBtov3UYL9pgcGK3MCWu";
   const account = accounts[0];
 
   beforeEach('setup contract and call', async () => {
     blog = await Blog.deployed();
-    result = await blog.publishContent(ipfsHash, {from: account});
   });
 
   it("emits Publish event on publish", async () => {
+    let result = await blog.publishContent(ipfsHash, {from: account});
     truffleAssert.eventEmitted(result, 'Publish', (ev) => {
-      return ev.publisher == account && 
+      return ev.publisher == account &&
              ev.ipfsHash == ipfsHash;
     });
   });
-
 });
